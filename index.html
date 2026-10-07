@@ -1,0 +1,805 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Organized notes for L3NIT, L4NIT, and L5NIT">
+  <title>NIT Notes — L3 · L4 · L5</title>
+  <link rel="stylesheet" href="/mobile.css">
+  
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f5f7fb; --surface:#fff; --surface2:#f8fafc;
+  --text:#101828; --muted:#667085; --border:#e4e7ec;
+  --primary:#635bff; --primary2:#7c5cff; --primary-soft:#eeecff;
+  --success:#12b76a; --danger:#f04438; --warning:#f79009;
+  --shadow:0 10px 30px rgba(16,24,40,.07);
+  --shadow-lg:0 24px 70px rgba(16,24,40,.13);
+  --radius:18px; --sidebar:250px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+ margin:0; min-height:100vh; overflow-x:hidden;
+ background:linear-gradient(135deg,#f8faff 0%,#f5f7fb 55%,#f9f8ff 100%);
+ color:var(--text);
+  font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+ line-height:1.5; -webkit-font-smoothing:antialiased;
+}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,a:focus-visible{
+ outline:3px solid rgba(99,91,255,.18);outline-offset:2px
+}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+.app-shell{min-height:100vh;display:block}
+.topbar{
+ position:fixed;left:var(--sidebar);right:0;top:0;height:76px;z-index:30;
+ display:flex;align-items:center;justify-content:space-between;gap:18px;
+ padding:0 30px;background:rgba(255,255,255,.88);border-bottom:1px solid var(--border);
+ backdrop-filter:blur(18px)
+}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{
+ display:grid;place-items:center;width:42px;height:42px;border-radius:13px;
+ background:linear-gradient(135deg,#635bff,#8b5cf6);color:#fff;font-weight:900;
+ box-shadow:0 8px 20px rgba(99,91,255,.28)
+}
+.brand h1{margin:0;font-size:1.05rem;letter-spacing:-.02em}
+.brand p{margin:2px 0 0;color:var(--muted);font-size:.74rem}
+.top-actions{display:flex;align-items:center;gap:10px}
+.account-name{max-width:220px;overflow:hidden;color:var(--muted);font-size:.84rem;text-overflow:ellipsis;white-space:nowrap}
+.button{
+ min-height:42px;padding:9px 15px;border:1px solid var(--border);border-radius:11px;
+ background:var(--surface);color:var(--text);font-size:.86rem;font-weight:750;
+ transition:.18s ease
+}
+.button:hover{transform:translateY(-1px);box-shadow:var(--shadow);border-color:#c9ced8}
+.button.primary{border-color:transparent;background:linear-gradient(135deg,#635bff,#7c5cff);color:#fff;box-shadow:0 8px 20px rgba(99,91,255,.22)}
+.button.primary:hover{filter:brightness(1.04)}
+.button.secondary{background:var(--surface2)}
+.button.danger{color:var(--danger);background:#fff5f4;border-color:#fecdca}
+.button[hidden]{display:none}
+
+.sidebar{
+ position:fixed;inset:0 auto 0 0;width:var(--sidebar);z-index:40;
+ padding:22px 16px;background:#101828;color:#fff;display:flex;flex-direction:column;
+ box-shadow:12px 0 40px rgba(16,24,40,.10)
+}
+.sidebar-brand{display:flex;align-items:center;gap:11px;padding:3px 8px 26px}
+.sidebar-brand .logo{
+ width:38px;height:38px;display:grid;place-items:center;border-radius:11px;
+ background:linear-gradient(135deg,#635bff,#8b5cf6);font-weight:900
+}
+.sidebar-brand strong{font-size:1rem}
+.sidebar-brand span{display:block;color:#98a2b3;font-size:.7rem;margin-top:2px}
+.side-label{padding:0 10px;margin:12px 0 7px;color:#667085;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em}
+.side-link{
+ width:100%;display:flex;align-items:center;gap:11px;padding:11px 12px;margin:2px 0;
+ border:0;border-radius:11px;background:transparent;color:#c7ced9;text-align:left;font-weight:650;font-size:.84rem;
+ transition:.18s ease
+}
+.side-link:hover,.side-link.active{background:rgba(255,255,255,.09);color:#fff}
+.side-link.active{box-shadow:inset 3px 0 #8b7cff}
+.side-icon{width:20px;text-align:center;font-size:1rem}
+.sidebar-footer{margin-top:auto;padding:12px 8px;color:#667085;font-size:.7rem;line-height:1.5}
+
+.main{width:min(1220px,calc(100% - 32px));margin-left:var(--sidebar);padding:108px 30px 70px}
+
+.hero{
+ position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:25px;
+ min-height:220px;margin-bottom:24px;padding:34px;border:1px solid #ddd9ff;border-radius:24px;
+ background:
+ radial-gradient(circle at 85% 25%,rgba(124,92,255,.20),transparent 25%),
+ linear-gradient(135deg,#fff,#f3f1ff 72%,#eeeaff);
+ box-shadow:var(--shadow)
+}
+.hero:after{content:"";position:absolute;width:220px;height:220px;right:-70px;bottom:-110px;border:45px solid rgba(99,91,255,.08);border-radius:50%}
+.hero>*{position:relative;z-index:1}
+.eyebrow{margin:0 0 7px;color:#635bff;font-size:.7rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase}
+.hero h2{max-width:700px;margin:0;font-size:clamp(1.8rem,4vw,2.8rem);letter-spacing:-.055em;line-height:1.06}
+.hero p{max-width:700px;margin:12px 0 0;color:var(--muted);font-size:.94rem}
+.hero-stat{
+ min-width:150px;padding:19px;border:1px solid rgba(99,91,255,.16);border-radius:18px;
+ background:rgba(255,255,255,.72);text-align:center;backdrop-filter:blur(10px)
+}
+.hero-stat strong{display:block;color:#635bff;font-size:1.8rem;line-height:1.1}
+
+.toolbar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;margin-bottom:9px}
+.search-wrap{position:relative}
+.search-wrap svg{position:absolute;top:50%;left:15px;width:19px;color:#98a2b3;transform:translateY(-50%);pointer-events:none}
+.search-input,.field,.select{
+ width:100%;min-height:46px;border:1px solid var(--border);border-radius:12px;background:var(--surface);
+ color:var(--text);outline:none;transition:.18s ease
+}
+.search-input{padding:10px 15px 10px 44px}
+.search-input:focus,.field:focus,.select:focus{border-color:#8b7cff;box-shadow:0 0 0 4px rgba(99,91,255,.10)}
+.search-input::placeholder,.field::placeholder{color:#98a2b3}
+
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:6px 2px 16px;scrollbar-width:thin}
+.tab{
+ min-width:105px;padding:10px 17px;border:1px solid var(--border);border-radius:999px;
+ background:var(--surface);color:var(--muted);font-size:.82rem;font-weight:800;transition:.18s ease
+}
+.tab:hover{transform:translateY(-1px);border-color:#c7c0ff}
+.tab.active{background:#635bff;border-color:#635bff;color:#fff;box-shadow:0 8px 18px rgba(99,91,255,.22)}
+
+.form-panel{
+ display:none;margin-bottom:24px;padding:25px;border:1px solid var(--border);border-radius:20px;
+ background:rgba(255,255,255,.96);box-shadow:var(--shadow-lg);animation:panel-in .22s ease-out
+}
+.form-panel.open{display:block}
+@keyframes panel-in{from{opacity:0;transform:translateY(-7px)}to{opacity:1;transform:translateY(0)}}
+.form-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:19px}
+.form-heading h3{margin:0;font-size:1.12rem}.form-heading p{margin:3px 0 0;color:var(--muted);font-size:.83rem}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.field,.select{padding:11px 13px;font-size:.9rem}
+.full-width{grid-column:1/-1}
+textarea.field{min-height:137px;resize:vertical;line-height:1.55}
+.file-input{width:100%;padding:11px;border:1px dashed #c9ced8;border-radius:12px;background:var(--surface2);color:var(--muted);font-size:.84rem}
+.file-input::file-selector-button{margin-right:10px;padding:5px 10px;border:0;border-radius:8px;background:var(--primary-soft);color:#5046c8;font-weight:750}
+.form-actions{display:flex;justify-content:flex-end;margin-top:17px}
+
+.status{display:none;margin-bottom:18px;padding:12px 14px;border:1px solid var(--border);border-radius:11px;background:var(--surface);color:var(--muted);font-size:.85rem}
+.status.visible{display:block}.status.error{color:#b42318;border-color:#fecdca;background:#fff5f4}.status.success{color:#067647;border-color:#abefc6;background:#ecfdf3}
+
+.section-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:28px 0 13px}
+.section-header h3{margin:0;font-size:1.1rem;letter-spacing:-.02em}.count{color:var(--muted);font-size:.8rem}
+
+.note-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}
+.note-card{
+ position:relative;overflow:hidden;padding:22px 21px 17px 24px;border:1px solid var(--border);
+ border-radius:18px;background:rgba(255,255,255,.96);box-shadow:var(--shadow);
+ transition:.2s ease
+}
+.note-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:#d5d0ff}
+.note-card:before{content:"";position:absolute;inset:0 auto 0 0;width:5px;background:#635bff}
+.note-card[data-level="L4NIT"]:before{background:#3b82f6}.note-card[data-level="L5NIT"]:before{background:#f79009}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.note-title{margin:0;font-size:1.04rem;line-height:1.32;letter-spacing:-.015em}
+.level-badge{flex:0 0 auto;padding:5px 9px;border-radius:999px;background:#eeecff;color:#5046c8;font-size:.67rem;font-weight:900}
+.note-card[data-level="L4NIT"] .level-badge{background:#eff8ff;color:#175cd3}
+.note-card[data-level="L5NIT"] .level-badge{background:#fffaeb;color:#b54708}
+.note-meta{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin:8px 0 14px;color:var(--muted);font-size:.75rem}
+.note-content{display:-webkit-box;min-height:58px;margin:0 0 15px;overflow:hidden;color:#475467;font-size:.87rem;line-height:1.62;white-space:pre-wrap;word-break:break-word;-webkit-box-orient:vertical;-webkit-line-clamp:5}
+.note-attachment{display:flex;align-items:center;gap:9px;margin-bottom:14px;padding:9px 10px;border:1px solid var(--border);border-radius:10px;background:var(--surface2);color:var(--muted);font-size:.78rem}
+.note-attachment svg{width:17px;color:#635bff;flex:0 0 auto}.note-attachment a{display:block;overflow:hidden;color:var(--text);text-decoration:none;text-overflow:ellipsis;white-space:nowrap}
+.note-attachment a:hover{color:#635bff;text-decoration:underline}
+.card-actions{display:flex;gap:7px;padding-top:12px;border-top:1px solid var(--border)}
+.icon-button{padding:7px 10px;border:0;border-radius:8px;background:transparent;color:var(--muted);font-size:.79rem;font-weight:750;transition:.15s}
+.icon-button:hover{background:var(--surface2);color:var(--text)}.icon-button.delete:hover{color:var(--danger);background:#fff5f4}
+
+.empty-state{grid-column:1/-1;min-height:235px;display:grid;place-items:center;padding:48px 20px;border:1px dashed #c9ced8;border-radius:20px;background:rgba(255,255,255,.55);text-align:center}
+.empty-content{max-width:360px}.empty-icon{display:grid;place-items:center;width:58px;height:58px;margin:0 auto 12px;border-radius:18px;background:#eeecff;font-size:1.65rem}
+.empty-state h4{margin:0 0 5px;font-size:1rem}.empty-state p{margin:0;color:var(--muted);font-size:.85rem}
+.loading{display:none;grid-column:1/-1;padding:28px;text-align:center;color:var(--muted)}.loading.visible{display:block}
+.spinner{display:inline-block;width:22px;height:22px;margin-right:8px;border:3px solid var(--border);border-top-color:#635bff;border-radius:50%;vertical-align:-5px;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.modal-backdrop{position:fixed;inset:0;z-index:50;display:none;place-items:center;padding:20px;background:rgba(16,24,40,.62);backdrop-filter:blur(6px)}
+.modal-backdrop.open{display:grid}
+.modal{width:min(440px,100%);padding:27px;border:1px solid rgba(255,255,255,.55);border-radius:20px;background:#fff;box-shadow:0 28px 80px rgba(0,0,0,.25);animation:modal-in .2s ease-out}
+@keyframes modal-in{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.modal h2{margin:0 0 6px;font-size:1.35rem}.modal>p{margin:0 0 20px;color:var(--muted);font-size:.9rem}.modal .field{margin-bottom:12px}
+.modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:18px}.login-error{min-height:20px;margin:5px 0 0;color:var(--danger);font-size:.84rem}
+.toast{position:fixed;right:22px;bottom:22px;z-index:60;max-width:min(365px,calc(100vw - 44px));padding:13px 16px;border-radius:12px;background:#101828;color:#fff;box-shadow:0 16px 38px rgba(16,24,40,.25);font-size:.85rem;font-weight:650;opacity:0;transform:translateY(13px);pointer-events:none;transition:.18s}
+.toast.show{opacity:1;transform:translateY(0)}.toast.error{background:#b42318}
+
+.dark-mode{
+ --bg:#0b1020;--surface:#111827;--surface2:#182131;--text:#f2f4f7;--muted:#98a2b3;--border:#273244;
+ --primary-soft:#24204a;--shadow:0 10px 30px rgba(0,0,0,.22);--shadow-lg:0 24px 70px rgba(0,0,0,.35)
+}
+.dark-mode body{background:linear-gradient(135deg,#0b1020,#111827,#15122a)}
+.dark-mode .topbar{background:rgba(17,24,39,.88)}
+.dark-mode .hero{background:radial-gradient(circle at 85% 25%,rgba(124,92,255,.16),transparent 25%),linear-gradient(135deg,#111827,#1b1833)}
+.dark-mode .note-card,.dark-mode .form-panel,.dark-mode .modal,.dark-mode .search-input,.dark-mode .field,.dark-mode .select,.dark-mode .button{background:var(--surface);color:var(--text)}
+.dark-mode .note-content{color:#c7ced9}.dark-mode .hero p,.dark-mode .brand p{color:var(--muted)}
+.dark-mode .hero-stat{background:rgba(17,24,39,.72)}
+.dark-mode .empty-state{background:rgba(17,24,39,.45)}
+
+.mobile-menu{display:none}
+@media(max-width:900px){
+ :root{--sidebar:0px}
+ .sidebar{display:none}.sidebar.open{display:flex}.mobile-menu{display:grid;place-items:center;width:42px;height:42px;border:1px solid var(--border);border-radius:11px;background:var(--surface)}
+ .mobile-overlay{position:fixed;inset:0;z-index:35;display:none;border:0;background:rgba(16,24,40,.48);backdrop-filter:blur(2px)}
+ .mobile-overlay.open{display:block}.topbar{left:0;padding:0 18px}.topbar .brand{display:none}
+ .main{margin-left:0;width:min(100% - 24px,1220px);padding:98px 0 50px}
+ .hero{padding:26px;align-items:flex-start;flex-direction:column}
+ .hero-stat{width:100%}.note-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+ .top-actions{gap:7px}.account-name{display:none}.topbar{height:68px}
+ .toolbar{grid-template-columns:1fr}.toolbar .button{width:100%}
+ .form-grid{grid-template-columns:1fr}.full-width{grid-column:auto}
+ .form-heading{align-items:flex-start;flex-direction:column}.form-heading .button{width:100%}
+ .hero{border-radius:18px}.hero h2{font-size:1.75rem}.note-card{padding:19px 17px 16px 21px}
+ .toast{right:12px;bottom:12px;max-width:calc(100vw - 24px)}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+
+
+
+
+
+<style>
+.pro-welcome{
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+  margin-bottom:18px;padding:17px 20px;border:1px solid #eaecf0;border-radius:16px;
+  background:#fff;box-shadow:0 4px 16px rgba(16,24,40,.035)
+}
+.pro-kicker{
+  display:block;margin-bottom:3px;color:#635bff;font-size:.64rem;font-weight:900;
+  letter-spacing:.13em
+}
+.pro-welcome h2{margin:0;font-size:1rem;letter-spacing:-.02em}
+.pro-welcome p{margin:2px 0 0;color:#667085;font-size:.78rem}
+.pro-live{
+  display:flex;align-items:center;gap:8px;white-space:nowrap;color:#067647;
+  font-size:.75rem;font-weight:750;background:#ecfdf3;border:1px solid #abefc6;
+  padding:8px 11px;border-radius:999px
+}
+.pro-live span{width:7px;height:7px;border-radius:50%;background:#12b76a;box-shadow:0 0 0 4px rgba(18,183,106,.10)}
+.student-background{display:flex;align-items:center;gap:10px;margin:20px 7px 0;padding:11px;border:1px solid rgba(255,255,255,.09);border-radius:13px;background:rgba(255,255,255,.05)}
+.student-avatar{display:grid;place-items:center;width:38px;height:38px;flex:0 0 auto;border-radius:12px;background:linear-gradient(135deg,#8b7cff,#635bff);color:#fff;font-size:.72rem;font-weight:900}
+.student-background strong{display:block;font-size:.76rem}.student-background span{display:block;margin-top:2px;color:#98a2b3;font-size:.64rem}
+.ai-assistant{margin:0 0 24px;padding:22px;border:1px solid #ddd9ff;border-radius:20px;background:linear-gradient(135deg,#fff,#f7f5ff);box-shadow:var(--shadow)}
+.assistant-heading{display:flex;align-items:center;gap:13px}.assistant-icon{display:grid;place-items:center;width:43px;height:43px;flex:0 0 auto;border-radius:14px;background:linear-gradient(135deg,#635bff,#8b5cf6);color:#fff;box-shadow:0 8px 20px rgba(99,91,255,.22)}
+.assistant-heading h2{margin:3px 0 0;font-size:1.04rem}.assistant-chat{min-height:64px;max-height:205px;margin:17px 0 13px;padding:13px 15px;overflow:auto;border:1px solid var(--border);border-radius:13px;background:var(--surface);color:#475467;font-size:.84rem;line-height:1.55}
+.assistant-message{margin:0}.assistant-message.user{color:#5046c8;font-weight:650}.assistant-form{display:flex;gap:9px}.assistant-input{width:100%;min-height:43px;padding:10px 13px;border:1px solid var(--border);border-radius:11px;background:var(--surface);color:var(--text);outline:none;font-size:.84rem}.assistant-input:focus{border-color:#8b7cff;box-shadow:0 0 0 4px rgba(99,91,255,.1)}
+.assistant-send{min-width:43px;min-height:43px;padding:0}.assistant-send:hover{transform:none}
+@media(max-width:600px){
+ .pro-welcome{align-items:flex-start;flex-direction:column}.ai-assistant{padding:18px}.assistant-heading{align-items:flex-start}
+}
+</style>
+
+</head>
+<body>
+  <div class="app-shell">
+
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="logo">N</div>
+        <div><strong>NIT Notes</strong><span>Student knowledge base</span></div>
+      </div>
+      <div class="side-label">Workspace</div>
+      <button class="side-link active" type="button" data-side="home"><span class="side-icon">▦</span>Dashboard</button>
+      <button class="side-link" type="button" data-side="L3NIT"><span class="side-icon">▤</span>L3NIT</button>
+      <button class="side-link" type="button" data-side="L4NIT"><span class="side-icon">▣</span>L4NIT</button>
+      <button class="side-link" type="button" data-side="L5NIT"><span class="side-icon">◈</span>L5NIT</button>
+      <div class="side-label">Tools</div>
+      <button class="side-link" type="button" id="sidebarAdd"><span class="side-icon">+</span>Add Note</button>
+      <button class="side-link" type="button" id="themeButton"><span class="side-icon">☾</span>Dark mode</button>
+      <div class="student-background">
+        <div class="student-avatar">ST</div>
+        <div><strong>Student study profile</strong><span>Active learner · NIT Notes</span></div>
+      </div>
+      <div class="sidebar-footer">Organize your L3NIT, L4NIT &amp; L5NIT learning in one place.</div>
+    </aside>
+
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:10px">
+        <button class="mobile-menu" id="mobileMenu" type="button" aria-label="Open navigation" aria-controls="sidebar" aria-expanded="false">☰</button>
+        <div class="brand">
+          <div class="brand-mark">N</div>
+          <div><h1>NIT Notes</h1><p>Knowledge base for L3NIT, L4NIT &amp; L5NIT</p></div>
+        </div>
+      </div>
+      <div class="top-actions">
+        <span class="account-name" id="accountName">Not signed in</span>
+        <button class="button secondary" id="loginButton" type="button">Login</button>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="pro-welcome">
+        <div>
+          <span class="pro-kicker">NIT STUDENT PORTAL</span>
+          <h2>Welcome to your learning workspace.</h2>
+          <p>Keep your notes, modules and course materials organized and easy to find.</p>
+        </div>
+        <div class="pro-live"><span></span> Workspace ready</div>
+      </div>
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Study workspace</p>
+          <h2>Everything you need for your NIT studies.</h2>
+          <p>Organize notes, modules, files and study materials for every course level from one professional workspace.</p>
+        </div>
+        <div class="hero-stat"><strong id="noteCount">0</strong> notes available</div>
+      </section>
+
+      <section class="ai-assistant" aria-labelledby="assistantTitle">
+        <div class="assistant-heading">
+          <div class="assistant-icon">✦</div>
+          <div><span class="pro-kicker">AI STUDY ASSISTANT</span><h2 id="assistantTitle">How can I help you study?</h2></div>
+        </div>
+        <div class="assistant-chat" id="assistantChat" aria-live="polite">
+          <p class="assistant-message">Hi! I can help organize your notes, explain a study topic, or suggest the next step for your current course level.</p>
+        </div>
+        <form class="assistant-form" id="assistantForm">
+          <label class="sr-only" for="assistantInput">Ask the AI study assistant</label>
+          <input class="assistant-input" id="assistantInput" type="text" maxlength="180" placeholder="Ask about your current study…" autocomplete="off" required>
+          <button class="button primary assistant-send" type="submit" aria-label="Send message">➤</button>
+        </form>
+      </section>
+
+      <section class="toolbar" aria-label="Note controls">
+        <label class="search-wrap">
+          <span class="sr-only" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">Search notes</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
+          <input class="search-input" id="searchInput" type="search" placeholder="Search title, module, content, or file…" autocomplete="off">
+        </label>
+        <button class="button primary" id="addNoteButton" type="button" hidden>+ Add note</button>
+      </section>
+
+      <nav class="tabs" id="levelTabs" aria-label="Filter by course level"></nav>
+
+      <section class="form-panel" id="noteForm" aria-labelledby="formTitle">
+        <div class="form-heading">
+          <div><h3 id="formTitle">Add a new note</h3><p id="formDescription">Save your knowledge for the selected course level.</p></div>
+          <button class="button secondary" id="cancelEditButton" type="button">Cancel</button>
+        </div>
+        <form id="noteFormElement">
+          <div class="form-grid">
+            <label class="full-width"><span class="sr-only">Title</span><input class="field" id="noteTitle" name="title" type="text" maxlength="120" placeholder="Note title" required></label>
+            <label><span class="sr-only">Module</span><input class="field" id="noteModule" name="module" type="text" maxlength="100" placeholder="Module or unit"></label>
+            <label><span class="sr-only">Course level</span><select class="select" id="noteLevel" name="level"><option value="L3NIT">L3NIT</option><option value="L4NIT">L4NIT</option><option value="L5NIT">L5NIT</option></select></label>
+            <label class="full-width"><span class="sr-only">Note content</span><textarea class="field" id="noteContent" name="content" maxlength="50000" placeholder="Write your note here…" required></textarea></label>
+            <label class="full-width"><span class="sr-only">Attachment</span><input class="file-input" id="noteFile" name="file" type="file"></label>
+          </div>
+          <div class="form-actions"><button class="button primary" id="saveNoteButton" type="submit">Save note</button></div>
+        </form>
+      </section>
+
+      <div class="status" id="statusMessage" role="status" aria-live="polite"></div>
+
+      <section aria-labelledby="notesHeading">
+        <div class="section-header"><h3 id="notesHeading">Notes</h3><span class="count" id="resultCount">0 results</span></div>
+        <div class="note-grid" id="noteList" aria-live="polite">
+          <div class="loading visible" id="loadingIndicator"><span class="spinner"></span>Loading notes…</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <button class="mobile-overlay" id="mobileOverlay" type="button" aria-label="Close navigation"></button>
+
+  <div class="modal-backdrop" id="loginDialog" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+    <div class="modal">
+      <h2 id="loginTitle">Admin login</h2>
+      <p>Sign in to create, edit, and delete notes.</p>
+      <form id="loginForm">
+        <label><span class="sr-only">Username</span><input class="field" id="username" type="text" autocomplete="username" placeholder="Username" required></label>
+        <label><span class="sr-only">Password</span><input class="field" id="password" type="password" autocomplete="current-password" placeholder="Password" required></label>
+        <p class="login-error" id="loginError" role="alert"></p>
+        <div class="modal-actions"><button class="button secondary" id="closeLoginButton" type="button">Cancel</button><button class="button primary" type="submit">Sign in</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const levels = ['L3NIT', 'L4NIT', 'L5NIT'];
+      const state = {
+        selectedLevel: 'L3NIT',
+        searchQuery: '',
+        authenticated: false,
+        token: localStorage.getItem('nitNotesToken') || '',
+        username: localStorage.getItem('nitNotesUser') || '',
+        editingId: null,
+        notes: []
+      };
+
+      const elements = {
+        noteList: document.getElementById('noteList'),
+        levelTabs: document.getElementById('levelTabs'),
+        searchInput: document.getElementById('searchInput'),
+        noteCount: document.getElementById('noteCount'),
+        resultCount: document.getElementById('resultCount'),
+        noteForm: document.getElementById('noteForm'),
+        noteFormElement: document.getElementById('noteFormElement'),
+        noteTitle: document.getElementById('noteTitle'),
+        noteModule: document.getElementById('noteModule'),
+        noteContent: document.getElementById('noteContent'),
+        noteLevel: document.getElementById('noteLevel'),
+        noteFile: document.getElementById('noteFile'),
+        formTitle: document.getElementById('formTitle'),
+        formDescription: document.getElementById('formDescription'),
+        addNoteButton: document.getElementById('addNoteButton'),
+        cancelEditButton: document.getElementById('cancelEditButton'),
+        loginButton: document.getElementById('loginButton'),
+        accountName: document.getElementById('accountName'),
+        assistantForm: document.getElementById('assistantForm'),
+        assistantInput: document.getElementById('assistantInput'),
+        assistantChat: document.getElementById('assistantChat'),
+        loginDialog: document.getElementById('loginDialog'),
+        loginForm: document.getElementById('loginForm'),
+        username: document.getElementById('username'),
+        password: document.getElementById('password'),
+        loginError: document.getElementById('loginError'),
+        closeLoginButton: document.getElementById('closeLoginButton'),
+        statusMessage: document.getElementById('statusMessage'),
+        toast: document.getElementById('toast')
+      };
+
+      function escapeHtml(value) {
+        return String(value ?? '').replace(/[&<>"']/g, character => ({
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        })[character]);
+      }
+
+      function formatDate(timestamp) {
+        return new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(new Date(timestamp));
+      }
+
+      function setStatus(message, type = '') {
+        elements.statusMessage.textContent = message;
+        elements.statusMessage.className = `status visible ${type}`.trim();
+      }
+
+      function showToast(message, type = '') {
+        elements.toast.textContent = message;
+        elements.toast.className = `toast show ${type}`.trim();
+        window.clearTimeout(showToast.timeout);
+        showToast.timeout = window.setTimeout(() => {
+          elements.toast.classList.remove('show');
+        }, 3200);
+      }
+
+      function api(url, options = {}) {
+        const headers = { ...(options.headers || {}) };
+        if (state.token) headers.Authorization = `Bearer ${state.token}`;
+        if (options.body && !(options.body instanceof FormData)) {
+          headers['Content-Type'] = 'application/json';
+        }
+
+        return fetch(url, { ...options, headers }).then(async response => {
+          const contentType = response.headers.get('content-type') || '';
+          const data = contentType.includes('application/json') ? await response.json() : await response.text();
+          if (!response.ok) {
+            if (response.status === 401) {
+              logout(false);
+              throw new Error(data.error || 'Authentication expired');
+            }
+            throw new Error(data.error || data || 'The request failed');
+          }
+          return data;
+        });
+      }
+
+      function openLoginDialog() {
+        elements.loginError.textContent = '';
+        elements.loginDialog.classList.add('open');
+        elements.username.focus();
+      }
+
+      function closeLoginDialog() {
+        elements.loginDialog.classList.remove('open');
+        elements.loginForm.reset();
+      }
+
+      function logout(showMessage = true) {
+        state.token = '';
+        state.username = '';
+        state.authenticated = false;
+        localStorage.removeItem('nitNotesToken');
+        localStorage.removeItem('nitNotesUser');
+        updateAuthState();
+        loadNotes();
+        if (showMessage) showToast('You have been signed out.');
+      }
+
+      function updateAuthState() {
+        state.authenticated = Boolean(state.token);
+        elements.loginButton.textContent = state.authenticated ? 'Logout' : 'Login';
+        elements.accountName.textContent = state.authenticated ? `Signed in as ${state.username}` : 'Not signed in';
+        elements.addNoteButton.hidden = !state.authenticated;
+      }
+
+      function addAssistantMessage(message, sender = 'assistant') {
+        const safeMessage = escapeHtml(message);
+        const messageClass = sender === 'user' ? 'assistant-message user' : 'assistant-message';
+        elements.assistantChat.insertAdjacentHTML('beforeend', `<p class="${messageClass}">${safeMessage}</p>`);
+        elements.assistantChat.scrollTop = elements.assistantChat.scrollHeight;
+      }
+
+      function getAssistantResponse(question) {
+        const normalized = question.toLowerCase();
+        const currentLevel = state.selectedLevel || 'L3NIT';
+        const noteCount = state.notes.length;
+
+        if (/organize|note|save|add/.test(normalized)) {
+          return `You are studying ${currentLevel}. Your current workspace contains ${noteCount} saved note${noteCount === 1 ? '' : 's'}. Start with a clear title, module, and concise summary, then save the note under the matching course level.`;
+        }
+        if (/study|review|exam|quiz|prepare/.test(normalized)) {
+          return `For ${currentLevel}, use active recall: create questions from your notes, answer them without looking, then review the missed questions. Your AI study assistant can help you turn the results into a focused study plan.`;
+        }
+        if (/help|what can|suggest/.test(normalized)) {
+          return 'I can help organize notes, build a study plan, summarize a topic, or recommend review questions for L3NIT, L4NIT, or L5NIT.';
+        }
+        return `You are currently working in ${currentLevel} with ${noteCount} saved note${noteCount === 1 ? '' : 's'}. Try asking about organizing notes, preparing for review, or creating a study plan.`;
+      }
+
+      function submitAssistantQuestion(event) {
+        event.preventDefault();
+        const question = elements.assistantInput.value.trim();
+        if (!question) return;
+        addAssistantMessage(question, 'user');
+        elements.assistantInput.value = '';
+        window.setTimeout(() => addAssistantMessage(getAssistantResponse(question)), 250);
+      }
+
+      function renderTabs() {
+        elements.levelTabs.innerHTML = levels.map(level => `
+          <button class="tab ${state.selectedLevel === level ? 'active' : ''}" type="button" data-level="${level}">${level}</button>
+        `).join('');
+
+        elements.levelTabs.querySelectorAll('[data-level]').forEach(button => {
+          button.addEventListener('click', () => {
+            state.selectedLevel = button.dataset.level;
+            renderTabs();
+            loadNotes();
+          });
+        });
+      }
+
+      function renderNote(note) {
+        const attachment = note.file ? `
+          <div class="note-attachment">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg>
+            <a href="${escapeHtml(note.file.url)}" target="_blank" rel="noopener" download="${escapeHtml(note.file.name)}">${escapeHtml(note.file.name)}</a>
+          </div>` : '';
+
+        const actions = state.authenticated ? `
+          <div class="card-actions">
+            <button class="icon-button" type="button" data-action="edit" data-id="${note.id}">Edit</button>
+            <button class="icon-button delete" type="button" data-action="delete" data-id="${note.id}">Delete</button>
+          </div>` : '';
+
+        return `
+          <article class="note-card" data-level="${escapeHtml(note.level)}">
+            <div class="card-top">
+              <h4 class="note-title">${escapeHtml(note.title)}</h4>
+              <span class="level-badge">${escapeHtml(note.level)}</span>
+            </div>
+            <div class="note-meta"><span>${escapeHtml(note.module || 'General')}</span><span>•</span><span>${formatDate(note.created)}</span></div>
+            <p class="note-content">${escapeHtml(note.content || 'No content added.')}</p>
+            ${attachment}
+            ${actions}
+          </article>`;
+      }
+
+      function renderNotes() {
+        const visibleNotes = state.notes;
+        elements.noteCount.textContent = String(visibleNotes.length);
+        elements.resultCount.textContent = `${visibleNotes.length} ${visibleNotes.length === 1 ? 'result' : 'results'}`;
+
+        if (!visibleNotes.length) {
+          elements.noteList.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-icon">📚</div>
+              <h4>No notes found</h4>
+              <p>${state.searchQuery ? 'Try changing your search term or course level.' : 'Add a note to start organizing your course material.'}</p>
+            </div>`;
+          return;
+        }
+
+        elements.noteList.innerHTML = visibleNotes.map(renderNote).join('');
+        elements.noteList.querySelectorAll('[data-action="edit"]').forEach(button => {
+          button.addEventListener('click', () => editNote(button.dataset.id));
+        });
+        elements.noteList.querySelectorAll('[data-action="delete"]').forEach(button => {
+          button.addEventListener('click', () => deleteNote(button.dataset.id));
+        });
+      }
+
+      async function loadNotes() {
+        elements.noteList.innerHTML = '<div class="loading visible" id="loadingIndicator"><span class="spinner"></span>Loading notes…</div>';
+        try {
+          const query = new URLSearchParams({ level: state.selectedLevel });
+          if (state.searchQuery) query.set('q', state.searchQuery);
+          const notes = await api(`/api/notes?${query.toString()}`);
+          state.notes = notes;
+          renderNotes();
+        } catch (error) {
+          elements.noteList.innerHTML = `<div class="empty-state"><h4>Unable to load notes</h4><p>${escapeHtml(error.message)}</p></div>`;
+          showToast(error.message, 'error');
+        }
+      }
+
+      function resetForm() {
+        elements.noteFormElement.reset();
+        state.editingId = null;
+        elements.noteLevel.value = state.selectedLevel;
+        elements.formTitle.textContent = 'Add a new note';
+        elements.formDescription.textContent = 'Save your knowledge for the selected course level.';
+        elements.noteForm.classList.remove('open');
+      }
+
+      function openForm() {
+        if (!state.authenticated) {
+          openLoginDialog();
+          return;
+        }
+        elements.noteForm.classList.add('open');
+        elements.noteTitle.focus();
+      }
+
+      function editNote(id) {
+        const note = state.notes.find(item => item.id === id);
+        if (!note) return;
+
+        state.editingId = id;
+        elements.noteTitle.value = note.title;
+        elements.noteModule.value = note.module;
+        elements.noteContent.value = note.content;
+        elements.noteLevel.value = note.level;
+        elements.formTitle.textContent = 'Edit note';
+        elements.formDescription.textContent = 'Update the selected note information.';
+        elements.noteForm.classList.add('open');
+        elements.noteTitle.focus();
+      }
+
+      async function deleteNote(id) {
+        if (!window.confirm('Delete this note? This action cannot be undone.')) return;
+        try {
+          await api(`/api/notes/${id}`, { method: 'DELETE' });
+          showToast('Note deleted successfully.');
+          await loadNotes();
+        } catch (error) {
+          showToast(error.message, 'error');
+        }
+      }
+
+      async function saveNote(event) {
+        event.preventDefault();
+        if (!elements.noteTitle.value.trim() || !elements.noteContent.value.trim()) {
+          setStatus('Title and content are required.', 'error');
+          return;
+        }
+
+        const payload = {
+          level: elements.noteLevel.value,
+          title: elements.noteTitle.value.trim(),
+          module: elements.noteModule.value.trim(),
+          content: elements.noteContent.value.trim()
+        };
+        const file = elements.noteFile.files[0];
+
+        try {
+          if (state.editingId) {
+            await api(`/api/notes/${state.editingId}`, { method: 'PUT', body: JSON.stringify(payload) });
+            showToast('Note updated successfully.');
+          } else {
+            const formData = new FormData();
+            Object.entries(payload).forEach(([key, value]) => formData.append(key, value));
+            if (file) formData.append('file', file);
+            await api('/api/notes', { method: 'POST', body: formData });
+            showToast('Note saved successfully.');
+          }
+          resetForm();
+          state.selectedLevel = payload.level;
+          renderTabs();
+          await loadNotes();
+        } catch (error) {
+          setStatus(error.message, 'error');
+        }
+      }
+
+      async function login(event) {
+        event.preventDefault();
+        elements.loginError.textContent = '';
+        try {
+          const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: elements.username.value, password: elements.password.value })
+          });
+          const data = await response.json();
+          if (!response.ok) throw new Error(data.error || 'Unable to sign in');
+          state.token = data.token;
+          state.username = data.username;
+          localStorage.setItem('nitNotesToken', state.token);
+          localStorage.setItem('nitNotesUser', state.username);
+          updateAuthState();
+          closeLoginDialog();
+          elements.password.value = '';
+          showToast('Signed in successfully.');
+          await loadNotes();
+        } catch (error) {
+          elements.loginError.textContent = error.message;
+        }
+      }
+
+
+      // Modern dashboard controls
+      const themeButton = document.getElementById('themeButton');
+      const sidebarAdd = document.getElementById('sidebarAdd');
+      const mobileMenu = document.getElementById('mobileMenu');
+      const mobileOverlay = document.getElementById('mobileOverlay');
+      const sidebar = document.getElementById('sidebar');
+
+      function setMobileMenu(open) {
+        if (!sidebar || !mobileMenu || !mobileOverlay) return;
+        sidebar.classList.toggle('open', open);
+        mobileOverlay.classList.toggle('open', open);
+        mobileMenu.setAttribute('aria-expanded', String(open));
+        mobileMenu.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+      }
+
+      function applyTheme(dark) {
+        document.documentElement.classList.toggle('dark-mode', dark);
+        localStorage.setItem('nitNotesTheme', dark ? 'dark' : 'light');
+        if (themeButton) themeButton.innerHTML = `<span class="side-icon">${dark ? '☀' : '◐'}</span>${dark ? 'Light mode' : 'Dark mode'}`;
+      }
+
+      applyTheme(localStorage.getItem('nitNotesTheme') === 'dark');
+      themeButton?.addEventListener('click', () => {
+        applyTheme(!document.documentElement.classList.contains('dark-mode'));
+      });
+      sidebarAdd?.addEventListener('click', openForm);
+      mobileMenu?.addEventListener('click', () => setMobileMenu(!sidebar.classList.contains('open')));
+      mobileOverlay?.addEventListener('click', () => setMobileMenu(false));
+      document.querySelectorAll('[data-side]').forEach(item => {
+        item.addEventListener('click', () => {
+          document.querySelectorAll('[data-side]').forEach(x => x.classList.remove('active'));
+          item.classList.add('active');
+          const level = item.dataset.side;
+          if (level === 'home') {
+            state.selectedLevel = 'L3NIT';
+          } else {
+            state.selectedLevel = level;
+          }
+          renderTabs();
+          loadNotes();
+          if (window.innerWidth <= 900) setMobileMenu(false);
+        });
+      });
+
+      elements.loginButton.addEventListener('click', () => {
+        if (state.authenticated) logout();
+        else openLoginDialog();
+      });
+      elements.closeLoginButton.addEventListener('click', closeLoginDialog);
+      elements.loginDialog.addEventListener('click', event => {
+        if (event.target === elements.loginDialog) closeLoginDialog();
+      });
+      elements.loginForm.addEventListener('submit', login);
+      elements.addNoteButton.addEventListener('click', openForm);
+      elements.cancelEditButton.addEventListener('click', resetForm);
+      elements.noteFormElement.addEventListener('submit', saveNote);
+      elements.searchInput.addEventListener('input', event => {
+        state.searchQuery = event.target.value;
+        loadNotes();
+      });
+      elements.noteLevel.addEventListener('change', event => {
+        state.selectedLevel = event.target.value;
+      });
+      elements.assistantForm.addEventListener('submit', submitAssistantQuestion);
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') {
+          if (elements.loginDialog.classList.contains('open')) closeLoginDialog();
+          else setMobileMenu(false);
+        }
+      });
+
+      updateAuthState();
+      renderTabs();
+      elements.noteLevel.value = state.selectedLevel;
+      loadNotes();
+      if (state.token) {
+        api('/api/me').then(() => {
+          updateAuthState();
+        }).catch(() => logout(false));
+      }
+    })();
+  </script>
+</body>
+</html>
